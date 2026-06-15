@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -11,50 +9,40 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Intro from './components/Intro';
+import ParticleField from './components/ParticleField';
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false
-    });
-  }, []);
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      if (window.location.hash === '') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
 
   return (
     <>
-      {showIntro ? (
-        <Intro onClick={() => setShowIntro(false)} />
-      ) : (
-        <div className="App">
-          <div className="space-stars">
-            {[...Array(80)].map((_, i) => (
-              <div key={i} className="star" style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`
-              }} />
-            ))}
+      <AnimatePresence>
+        {showIntro && <Intro onComplete={() => setShowIntro(false)} />}
+      </AnimatePresence>
+
+      {!showIntro && (
+        <div className="app-wrapper">
+          <div className="aurora-bg" />
+          
+          {/* Ambient lighting orbs */}
+          <div className="ambient-orb orb-cyan" />
+          <div className="ambient-orb orb-purple" />
+          <div className="ambient-orb orb-magenta" />
+
+          {/* Grid background & Particles */}
+          <div className="grid-bg" />
+          <ParticleField />
+
+          {/* Main content */}
+          <div className="main-content">
+            <Navbar />
+            <Hero />
+            <About />
+            <Skills />
+            <Projects />
+            <Contact />
+            <Footer />
           </div>
-          <Navbar />
-          <Hero />
-          <About />
-          <Skills />
-          <Projects />
-          <Contact />
-          <Footer />
         </div>
       )}
     </>

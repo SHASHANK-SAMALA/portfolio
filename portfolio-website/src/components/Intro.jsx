@@ -1,52 +1,105 @@
-// src/components/Intro.jsx
-import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars, useGLTF } from '@react-three/drei';
-import './Intro.css';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const Spaceship = () => {
-  const { scene } = useGLTF('/assets/models/spaceship.glb');
-  return <primitive object={scene} scale={0.3} position={[2, 0, 0]} />;
-};
+const BOOT_LINES = [
+  { type: 'command', prompt: '~', text: 'whoami' },
+  { type: 'output', text: 'shashank_samala // AI & Full-Stack Engineer' },
+  { type: 'command', prompt: '~', text: 'cat skills.txt' },
+  { type: 'output', text: 'LangGraph · MCP · FastAPI · React · Docker · AWS' },
+  { type: 'command', prompt: '~', text: 'ls projects/' },
+  { type: 'output', text: '6 production-grade systems loaded.' },
+  { type: 'command', prompt: '~', text: './launch_portfolio.sh' },
+  { type: 'output', text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100% — Ready.' },
+];
 
-const Planet = () => {
-  const { scene } = useGLTF('/assets/models/planet.glb');
-  return <primitive object={scene} scale={0.6} position={[0, -1, 0]} />;
-};
+const Intro = ({ onComplete }) => {
+  const [visibleLines, setVisibleLines] = useState(0);
+  const [isExiting, setIsExiting] = useState(false);
 
-const Scene = () => {
+  useEffect(() => {
+    if (visibleLines < BOOT_LINES.length) {
+      const delay = BOOT_LINES[visibleLines]?.type === 'command' ? 350 : 250;
+      const timer = setTimeout(() => setVisibleLines((v) => v + 1), delay);
+      return () => clearTimeout(timer);
+    } else {
+      const exitTimer = setTimeout(() => setIsExiting(true), 800);
+      const completeTimer = setTimeout(() => onComplete(), 1400);
+      return () => {
+        clearTimeout(exitTimer);
+        clearTimeout(completeTimer);
+      };
+    }
+  }, [visibleLines, onComplete]);
+
+  const handleSkip = () => {
+    setIsExiting(true);
+    setTimeout(() => onComplete(), 500);
+  };
+
   return (
-    <>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 5, 5]} />
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-      <Planet />
-      <Spaceship />
-      <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={3} />
-    </>
-  );
-};
+    <AnimatePresence>
+      {!isExiting && (
+        <motion.div
+          className="intro-screen"
+          onClick={handleSkip}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <motion.div
+            className="intro-terminal"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="terminal-header">
+              <span className="terminal-dot red" />
+              <span className="terminal-dot yellow" />
+              <span className="terminal-dot green" />
+            </div>
 
-const Intro = ({ onClick }) => {
-  return (
-    <div className="intro-container" onClick={onClick}>
-      <Canvas className="space-bg">
-        <Stars radius={300} depth={60} count={5000} factor={7} fade speed={1} />
-        <ambientLight intensity={0.5} />
-        {/* <Suspense fallback={null}>
-          <mesh>
-            <sphereGeometry args={[1, 32, 32]} />
-            <meshStandardMaterial color="orange" />
-          </mesh>
-        </Suspense> */}
-        <OrbitControls />
-      </Canvas>
-      <h1 className="intro-title">
-        Reality is overrated.<br />
-        Let’s get into a parallel universe!
-      </h1>
-      <p className="intro-sub">Click anywhere to enter my portfolio.</p>
-    </div>
+            {BOOT_LINES.slice(0, visibleLines).map((line, i) => (
+              <motion.div
+                key={i}
+                className="terminal-line"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {line.type === 'command' ? (
+                  <>
+                    <span className="prompt">❯ </span>
+                    <span className="path">{line.prompt}</span>
+                    <span className="command"> {line.text}</span>
+                  </>
+                ) : (
+                  <span className="output">  {line.text}</span>
+                )}
+              </motion.div>
+            ))}
+
+            {visibleLines < BOOT_LINES.length && (
+              <motion.span
+                className="terminal-line"
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.6, repeat: Infinity }}
+                style={{ display: 'inline-block', color: 'var(--accent-cyan)' }}
+              >
+                ▋
+              </motion.span>
+            )}
+          </motion.div>
+
+          <motion.p
+            className="intro-hint"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
+            click anywhere to skip →
+          </motion.p>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

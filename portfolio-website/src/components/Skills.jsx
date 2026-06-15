@@ -1,68 +1,159 @@
 import React from 'react';
-import { FaHtml5, FaCss3Alt, FaReact, FaJs, FaPython, FaJava, FaDatabase } from 'react-icons/fa';
-import { SiMongodb, SiExpress } from 'react-icons/si';
+import { motion } from 'framer-motion';
+import {
+  FaPython, FaJava, FaReact, FaDocker, FaAws, FaGitAlt, FaDatabase,
+} from 'react-icons/fa';
+import {
+  SiTypescript, SiJavascript, SiFastapi, SiFlask, SiNodedotjs, SiExpress,
+  SiPostgresql, SiMongodb, SiRedis, SiSqlite, SiNginx, SiGrafana,
+  SiPrometheus, SiApachekafka, SiGitlab,
+} from 'react-icons/si';
+import { Brain, Bot, Layers, Cpu, Eye, GitBranch, Server, Workflow } from 'lucide-react';
+
+const CATEGORIES = [
+  {
+    title: 'Languages',
+    skills: [
+      { name: 'Python', icon: <FaPython size={14} /> },
+      { name: 'JavaScript', icon: <SiJavascript size={13} /> },
+      { name: 'TypeScript', icon: <SiTypescript size={13} /> },
+      { name: 'Java', icon: <FaJava size={14} /> },
+      { name: 'SQL', icon: <FaDatabase size={13} /> },
+    ],
+  },
+  {
+    title: 'AI & Agents',
+    skills: [
+      { name: 'LangGraph', icon: <Workflow size={13} /> },
+      { name: 'LangChain', icon: <Layers size={13} /> },
+      { name: 'MCP', icon: <Bot size={13} /> },
+      { name: 'RAG', icon: <Brain size={13} /> },
+      { name: 'OpenAI', icon: <Cpu size={13} /> },
+      { name: 'Gemini Pro', icon: <Cpu size={13} /> },
+      { name: 'Mem0', icon: <Brain size={13} /> },
+      { name: 'DeepEval', icon: <Eye size={13} /> },
+    ],
+    accentClass: 'purple',
+  },
+  {
+    title: 'Frontend',
+    skills: [
+      { name: 'React 19', icon: <FaReact size={14} /> },
+      { name: 'Zustand', icon: <Layers size={13} /> },
+      { name: 'Framer Motion', icon: <Layers size={13} /> },
+      { name: 'TailwindCSS', icon: <Layers size={13} /> },
+      { name: 'Vite', icon: <Layers size={13} /> },
+    ],
+  },
+  {
+    title: 'Backend & APIs',
+    skills: [
+      { name: 'FastAPI', icon: <SiFastapi size={14} /> },
+      { name: 'Flask', icon: <SiFlask size={14} /> },
+      { name: 'Express.js', icon: <SiExpress size={14} /> },
+      { name: 'Node.js', icon: <SiNodedotjs size={14} /> },
+    ],
+  },
+  {
+    title: 'Databases',
+    skills: [
+      { name: 'PostgreSQL', icon: <SiPostgresql size={14} /> },
+      { name: 'pgvector', icon: <FaDatabase size={13} /> },
+      { name: 'MongoDB', icon: <SiMongodb size={14} /> },
+      { name: 'Redis', icon: <SiRedis size={14} /> },
+      { name: 'SQLite', icon: <SiSqlite size={14} /> },
+      { name: 'Meilisearch', icon: <FaDatabase size={13} /> },
+    ],
+  },
+  {
+    title: 'DevOps & Infra',
+    skills: [
+      { name: 'Docker', icon: <FaDocker size={14} /> },
+      { name: 'Docker Compose', icon: <FaDocker size={14} /> },
+      { name: 'Nginx', icon: <SiNginx size={14} /> },
+      { name: 'AWS', icon: <FaAws size={14} /> },
+      { name: 'GitLab CI/CD', icon: <SiGitlab size={14} /> },
+      { name: 'GitHub Actions', icon: <FaGitAlt size={14} /> },
+    ],
+    accentClass: 'magenta',
+  },
+  {
+    title: 'Observability',
+    skills: [
+      { name: 'OpenTelemetry', icon: <Eye size={13} /> },
+      { name: 'Prometheus', icon: <SiPrometheus size={14} /> },
+      { name: 'Grafana', icon: <SiGrafana size={14} /> },
+      { name: 'LangSmith', icon: <Eye size={13} /> },
+    ],
+    accentClass: 'green',
+  },
+  {
+    title: 'Architecture',
+    skills: [
+      { name: 'Microservices', icon: <Server size={13} /> },
+      { name: 'Event-Driven', icon: <SiApachekafka size={13} /> },
+      { name: 'WebSocket', icon: <Layers size={13} /> },
+      { name: 'RBAC', icon: <GitBranch size={13} /> },
+      { name: 'Repository Pattern', icon: <Layers size={13} /> },
+      { name: 'Factory', icon: <Layers size={13} /> },
+      { name: 'Strategy', icon: <Workflow size={13} /> },
+      { name: 'Observer', icon: <Eye size={13} /> },
+    ],
+    accentClass: 'purple',
+  },
+];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+};
 
 function Skills() {
   return (
-    <section id="skills" className="py-5">
+    <section id="skills" className="section">
       <div className="container">
-        <div className="row text-center mb-5" data-aos="fade-up">
-          <h2 className="display-5 fw-bold text-primary">My Skills</h2>
-          <div className="underline mx-auto" style={{ width: '100px', height: '3px', backgroundColor: '#007bff', margin: '20px auto' }}></div>
-        </div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+          variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
+        >
+          <motion.p className="section-label" variants={fadeUp}>// Tech Stack</motion.p>
+          <motion.h2 className="section-title" variants={fadeUp}>
+            Tools I wield<br />
+            <span className="gradient-text">to ship production code.</span>
+          </motion.h2>
+          <motion.p className="section-subtitle" variants={fadeUp} style={{ marginBottom: '3rem' }}>
+            From agentic AI orchestration to microservice infrastructure — here's everything in my arsenal.
+          </motion.p>
 
-        <div className="row text-center">
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="100">
-            <FaHtml5 size={40} className="text-white mb-2" />
-            <h4 className="text-white">HTML5</h4>
+          <div className="skills-categories">
+            {CATEGORIES.map((cat, catIndex) => (
+              <motion.div
+                key={cat.title}
+                className="skill-category glass-card gradient-border-card"
+                variants={fadeUp}
+                custom={catIndex}
+              >
+                <div className="skill-category-title">{cat.title}</div>
+                <div className="skill-tags">
+                  {cat.skills.map((skill) => (
+                    <span
+                      key={skill.name}
+                      className={`tech-badge ${cat.accentClass || ''}`}
+                    >
+                      {skill.icon}
+                      {skill.name}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="200">
-            <FaCss3Alt size={40} className="text-white mb-2" />
-            <h4 className="text-white">CSS3</h4>
-          </div>
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="300">
-            <FaJs size={40} className="text-white mb-2" />
-            <h4 className="text-white">JavaScript</h4>
-          </div>
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="400">
-            <FaReact size={40} className="text-white mb-2" />
-            <h4 className="text-white">React.js</h4>
-          </div>
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="500">
-            <FaPython size={40} className="text-white mb-2" />
-            <h4 className="text-white">Python</h4>
-          </div>
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="600">
-            <FaJava size={40} className="text-white mb-2" />
-            <h4 className="text-white">Java</h4>
-          </div>
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="700">
-            <FaDatabase size={40} className="text-white mb-2" />
-            <h4 className="text-white">SQL</h4>
-          </div>
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="800">
-            <SiMongodb size={40} className="text-white mb-2" />
-            <h4 className="text-white">MongoDB</h4>
-          </div>
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="900">
-            <SiExpress size={40} className="text-white mb-2" />
-            <h4 className="text-white">Express.js</h4>
-          </div>
-          <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="1000" style={{ marginTop: '30px' }}>
-            <h4 className="text-white">AWS</h4>
-          </div>
-           <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="1000" style={{ marginTop: '30px' }}>
-            <h4 className="text-white">Bootstrap</h4>
-          </div>
-           <div className="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="1000" style={{ marginTop: '30px' }}>
-            <h4 className="text-white">Flask</h4>
-          </div>
-          
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
 export default Skills;
-

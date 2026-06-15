@@ -1,56 +1,69 @@
 import React from 'react';
-import { FaGraduationCap, FaCode, FaAws } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { GraduationCap, Rocket, Brain, Code2 } from 'lucide-react';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+};
+
+const STATS = [
+  { icon: <Rocket size={20} />, value: '6+', label: 'Production Projects', color: 'var(--accent-cyan)' },
+  { icon: <Code2 size={20} />, value: '20+', label: 'Technologies', color: 'var(--accent-purple)' },
+  { icon: <GraduationCap size={20} />, value: '8.8', label: 'CGPA', color: 'var(--accent-magenta)' },
+  { icon: <Brain size={20} />, value: '5+', label: 'AI/Agent Systems', color: 'var(--accent-green)' },
+];
 
 function About() {
   return (
-    <section id="about" className="py-5" style={{ backgroundColor: '#f8f9fa' }}>
+    <section id="about" className="section">
       <div className="container">
-        <div className="row text-center mb-5" data-aos="fade-up">
-          <h2 className="display-5 fw-bold text-primary">About Me</h2>
-          <div className="underline mx-auto" style={{ width: '100px', height: '3px', backgroundColor: '#007bff', margin: '20px auto' }}></div>
-        </div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+          variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+        >
+          <motion.p className="section-label" variants={fadeUp}>// About Me</motion.p>
+          <motion.h2 className="section-title" variants={fadeUp}>
+            Engineering the future,<br />
+            <span className="gradient-text">one agent at a time.</span>
+          </motion.h2>
 
-        <div className="row align-items-center">
-          <div className="col-lg-6 mb-4" data-aos="fade-right">
-            <h3 className="h4 mb-3 text-primary">MERN Stack & Machine Learning Engineer</h3>
-            <ul className="list-unstyled">
-              <li className="mb-2">🎓 Computer Science Engineering student at <strong>Keshav Memorial Institute of Technology</strong> (CGPA: 8.8).</li>
-              <li className="mb-2">💻 Expertise in full-stack web development (MERN stack) and machine learning applications.</li>
-              <li className="mb-2">🌟 Experience in healthcare, education, hospitality, and e-commerce domains.</li>
-            </ul>
-          </div>
+          <div className="about-grid" style={{ marginTop: '3rem' }}>
+            <motion.div className="about-text" variants={fadeUp}>
+              <p>
+                I'm a <span className="about-highlight">Computer Science Engineering</span> student at{' '}
+                <strong>Keshav Memorial Institute of Technology</strong>, Hyderabad — obsessed with building
+                systems that are production-grade from day one.
+              </p>
+              <p>
+                My sweet spot is the intersection of{' '}
+                <span className="about-highlight">agentic AI</span> and{' '}
+                <span className="about-highlight">distributed systems</span>. I don't just build chatbots — I architect
+                multi-agent orchestrations with LangGraph, wire them to real-world tools via MCP, and deploy them
+                behind FastAPI microservices with full observability stacks.
+              </p>
+              <p>
+                When I'm not building AI agents, I'm designing microservice platforms with Docker, Redis Streams,
+                PostgreSQL, and CI/CD pipelines that ship to AWS. Every project I build could go to production tomorrow.
+              </p>
+              <p style={{ marginTop: '1.5rem' }}>
+                <span className="tech-badge green">🔍 Open to FAANG & top-tier opportunities</span>
+              </p>
+            </motion.div>
 
-          <div className="col-lg-6 mb-4" data-aos="fade-left">
-            <div className="card p-4 shadow-sm">
-              <h4 className="text-primary mb-3">Key Stats</h4>
-              <div className="row text-center">
-                <div className="col-4">
-                  <h5 className="text-primary fw-bold">10+</h5>
-                  <small className="text-muted">Skills</small>
+            <motion.div className="about-stats-grid" variants={fadeUp}>
+              {STATS.map((stat) => (
+                <div key={stat.label} className="about-stat-card glass-card">
+                  <div style={{ color: stat.color, marginBottom: '0.5rem' }}>{stat.icon}</div>
+                  <div className="stat-value gradient-text">{stat.value}</div>
+                  <div className="stat-label">{stat.label}</div>
                 </div>
-                <div className="col-4">
-                  <h5 className="text-primary fw-bold">3</h5>
-                  <small className="text-muted">Projects</small>
-                </div>
-                <div className="col-4">
-                  <h5 className="text-primary fw-bold">8.8</h5>
-                  <small className="text-muted">CGPA</small>
-                </div>
-              </div>
-            </div>
+              ))}
+            </motion.div>
           </div>
-        </div>
-
-        <div className="row mt-5">
-          <div className="col-12 text-center" data-aos="fade-up">
-            <h5 className="text-primary mb-3">Development Tools</h5>
-            <div className="d-flex justify-content-center flex-wrap gap-3">
-              <span className="badge bg-light text-dark p-2 shadow-sm">VS Code</span>
-              <span className="badge bg-light text-dark p-2 shadow-sm">Cursor</span>
-              <span className="badge bg-light text-dark p-2 shadow-sm">Warp Terminal</span>
-            </div>
-          </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
